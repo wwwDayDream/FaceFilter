@@ -1,0 +1,35 @@
+[config]
+schemaVersion = "0.0.1"
+
+[package]
+namespace = "www_Day_Dream"
+name = "FaceFilter"
+description = "Host only mod that gives non-friends random faces."
+containsNsfwContent = false
+websiteUrl = ""
+[package.dependencies]
+BepInEx-BepInExPack = "5.4.2100"
+
+[build]
+icon = "icon.png"
+readme = "README.md"
+outdir = "../dist"
+
+[[build.copy]]
+source = "../bin/Release/netstandard2.1/FaceFilter.dll"
+target = "/BepInEx/plugins/FaceFilter/"
+
+[[build.copy]]
+source = "../bin/Release/netstandard2.1/ProfanityFilter.dll"
+target = "/BepInEx/plugins/FaceFilter/ProfanityFilter.lib"
+
+[[build.copy]]
+source = "../ProfanityDetector.LICENSE"
+target = "/BepInEx/plugins/FaceFilter/"
+
+[publish]
+communities = [ "content-warning" ]
+repository = "https://thunderstore.io"
+[publish.categories]
+content-warning = [ "mods" ]
+# For a list of valid tags, look at the slug values in https://thunderstore.io/api/experimental/community/content-warning/category/

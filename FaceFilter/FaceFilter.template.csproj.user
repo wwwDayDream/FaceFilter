@@ -1,0 +1,12 @@
+<Project>
+    <!-- Custom Variables -->
+    <PropertyGroup>
+        <GameDirectory>%AppData%/Steam/steamapps/Common/Content Warning/</GameDirectory>
+    </PropertyGroup>
+
+    <!-- Game Directories - Do Not Modify -->
+    <PropertyGroup>
+        <DataDirectory>$(GameDirectory)Content Warning_Data/</DataDirectory>
+        <ManagedDirectory>$(DataDirectory)Managed/</ManagedDirectory>
+    </PropertyGroup>
+</Project>
