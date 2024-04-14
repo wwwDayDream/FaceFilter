@@ -1,1 +1,1 @@
-Host only mod that filters clients face text to reduce unwanted content.
+Host and client mod that filters face text to reduce unwanted content.
