@@ -12,46 +12,25 @@ namespace FaceFilter.Patches;
 
 [HarmonyPatch(typeof(PlayerVisor))]
 public static class PlayerVisorSetVisorTextRPCPatch {
-    public static ProfanityFilter.ProfanityFilter Filter { get; } = new();
-
-    static PlayerVisorSetVisorTextRPCPatch()
-    {
-        var resourceKey = typeof(FaceFilter).Namespace + ".WordBlock.txt";
-        var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceKey);
-        if (stream == null)
-            throw new ArgumentException(resourceKey);
-        using var wordStreamReader = new StreamReader(stream);
-
-        while (!wordStreamReader.EndOfStream)
-        {
-            var word = wordStreamReader.ReadLine();
-            Filter.AddProfanity(word);
-        }
-    }
-
-    private static bool IsProfane(string text) =>
-        Filter.IsProfanity(text) || Filter.DetectAllProfanities(text).Count > 0 ||
-        text.Aggregate(false, (b, c) => b || Filter.IsProfanity(c.ToString()));
-    
     [HarmonyPatch(nameof(PlayerVisor.RPCA_SetVisorText))]
     [HarmonyPostfix]
     private static void PreventPlebsFromUsingBadNames(PlayerVisor __instance)
     {
-        
         var faceText = __instance.visorFaceText.text;
-        if (!IsProfane(faceText)) return;
+        if (!Filtration.IsProfane(faceText)) return;
         
         __instance.visorFaceText.text = FaceDatabase.GetFace(FaceDatabase.GetRandomFaceIndex());
         FaceFilter.Logger.LogInfo($"Blocking profane face text from '{__instance.m_player.name}': '{faceText}' -> " +
                                   $"'{__instance.visorFaceText.text}'");
         
-        if (!Player.localPlayer.refs.view.Controller.IsMasterClient) return;
-        __instance.StartCoroutine(DelayedFaceTransmission(__instance));
+        __instance.StartCoroutine(DelayedFaceTransmission(__instance, faceText));
     }
 
-    private static IEnumerator DelayedFaceTransmission(PlayerVisor visor)
+    private static IEnumerator DelayedFaceTransmission(PlayerVisor visor, string profanity)
     {
-        yield return new WaitForSeconds(0.5f);
+        var players = PlayerHandler.instance.GetPlayerID(Player.localPlayer);
+        yield return new WaitForSeconds(0.25f*(players+1));
+        if (visor.visorFaceText.text != profanity) yield break;
         visor.m_player.refs.view.RPC("RPCA_SetVisorText", RpcTarget.All, visor.visorFaceText.text);
     }
 }
