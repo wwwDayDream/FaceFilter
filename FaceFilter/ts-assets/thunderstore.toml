@@ -3,10 +3,10 @@ schemaVersion = "0.0.1"
 
 [package]
 namespace = "www_Day_Dream"
-name = "FaceFilter"
-description = "Host only mod that gives non-friends random faces."
+name = "NiceFaces"
+description = "Host and client mod that filters face text to reduce unwanted content."
 containsNsfwContent = false
-websiteUrl = ""
+websiteUrl = "https://github.com/wwwDayDream/FaceFilter"
 [package.dependencies]
 BepInEx-BepInExPack = "5.4.2100"
 
