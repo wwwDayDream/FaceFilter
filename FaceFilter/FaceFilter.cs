@@ -42,15 +42,15 @@ public class FaceFilter : BaseUnityPlugin {
     private static void LoadProfanityFilter()
     {
         var location = Assembly.GetExecutingAssembly().Location;
-        var profanityDll = location.Replace(Path.GetFileName(location), "ProfanityFilter.lib");
+        var profanityDll = location.Replace(Path.GetFileName(location), "ProfanityDetector.lib");
         if (!File.Exists(profanityDll))
-            throw new Exception("No ProfanityFilter.dll library found!");
+            throw new Exception("No ProfanityDetector library found!");
         
         var assem = Assembly.LoadFile(profanityDll);
         if (assem == null)
-            throw new Exception("Failed to load assembly from bytes!");
+            throw new Exception("Failed to load assembly!");
         
-        Logger.LogDebug("Finished loading ProfanityFilter.lib!");
+        Logger.LogDebug("Finished loading ProfanityDetector.lib!");
     }
 
     internal static void Unpatch()
