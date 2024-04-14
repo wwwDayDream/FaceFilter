@@ -21,7 +21,7 @@ target = "/BepInEx/plugins/FaceFilter/"
 
 [[build.copy]]
 source = "../bin/Release/netstandard2.1/ProfanityFilter.dll"
-target = "/BepInEx/plugins/FaceFilter/ProfanityFilter.lib"
+target = "/BepInEx/plugins/FaceFilter/ProfanityDetector.lib"
 
 [[build.copy]]
 source = "../ProfanityDetector.LICENSE"
