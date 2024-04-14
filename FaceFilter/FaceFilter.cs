@@ -10,19 +10,49 @@ using ProfanityFilter;
 
 namespace FaceFilter;
 
+public static class Filtration {
+    public static ProfanityFilter.ProfanityFilter Filter { get; } = new();
+    public static bool Initialized = false;
+
+    public static bool IsProfane(string text)
+    {
+        if (!Initialized)
+        {
+            Initialized = true;
+            Init();
+        }
+        return Filter.IsProfanity(text) || Filter.DetectAllProfanities(text).Count > 0 ||
+               text.Aggregate(false, (b, c) => b || Filter.IsProfanity(c.ToString()));
+    }
+
+    public static void Init()
+    {
+        var resourceKey = typeof(FaceFilter).Namespace + ".WordBlock.txt";
+        var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceKey);
+        if (stream == null)
+            throw new ArgumentException(resourceKey);
+        using var wordStreamReader = new StreamReader(stream);
+
+        while (!wordStreamReader.EndOfStream)
+        {
+            var word = wordStreamReader.ReadLine();
+            Filter.AddProfanity(word);
+        }
+    }
+}
+
 [ContentWarningPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_VERSION, true)]
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 public class FaceFilter : BaseUnityPlugin {
     public static FaceFilter Instance { get; private set; } = null!;
     internal new static ManualLogSource Logger { get; private set; } = null!;
     internal static Harmony? Harmony { get; set; }
-
+    
     private void Awake()
     {
         Logger = base.Logger;
         Instance = this;
 
-        LoadProfanityFilter();
         Patch();
 
         Logger.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
@@ -38,21 +68,6 @@ public class FaceFilter : BaseUnityPlugin {
 
         Logger.LogDebug("Finished patching!");
     }
-
-    private static void LoadProfanityFilter()
-    {
-        var location = Assembly.GetExecutingAssembly().Location;
-        var profanityDll = location.Replace(Path.GetFileName(location), "ProfanityDetector.lib");
-        if (!File.Exists(profanityDll))
-            throw new Exception("No ProfanityDetector library found!");
-        
-        var assem = Assembly.LoadFile(profanityDll);
-        if (assem == null)
-            throw new Exception("Failed to load assembly!");
-        
-        Logger.LogDebug("Finished loading ProfanityDetector.lib!");
-    }
-
     internal static void Unpatch()
     {
         Logger.LogDebug("Unpatching...");

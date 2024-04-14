@@ -15,6 +15,7 @@ cnt
 phk
 phc
 phq
+sti
 nzi
 nz
 nz*

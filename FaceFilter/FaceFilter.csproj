@@ -82,7 +82,7 @@
     <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(CI) != 'true'">
         <Exec ContinueOnError="true" Command="taskkill /f /im &quot;Content Warning.exe&quot;"/>
         <Exec Command="copy &quot;$(OutputPath)/$(AssemblyName).*&quot; &quot;$(CW_REFERENCES)/../../BepInEx/plugins/&quot;" />
-        <Exec Command="copy &quot;$(OutputPath)/ProfanityFilter.dll&quot; &quot;$(CW_REFERENCES)/../../BepInEx/plugins/ProfanityDetector.lib&quot;" />
+        <Exec Command="copy &quot;$(OutputPath)/ProfanityFilter.dll&quot; &quot;$(CW_REFERENCES)/../../BepInEx/plugins/&quot;" />
     </Target>
     
     <!-- Download ProfanityFilter License -->
