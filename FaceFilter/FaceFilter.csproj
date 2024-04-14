@@ -65,7 +65,7 @@
         <PackageReference Include="BepInEx.Core" Version="5.*" PrivateAssets="all"/>
         <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" PrivateAssets="all"/>
         <PackageReference Include="UnityEngine.Modules" Version="2022.3.10" PrivateAssets="all"/>
-        <PackageReference Include="ContentWarning.GameLibs.Steam" Version="0.1.9-b-ngd.0" PrivateAssets="all" Publicize="true"/>
+        <PackageReference Include="ContentWarning.GameLibs.Steam" Version="*-*" Publicize="true" PrivateAssets=""/>
         <PackageReference Include="MinVer" Version="4.*" PrivateAssets="all"/>
         <PackageReference Include="Profanity.Detector" Version="0.1.8"/>
     </ItemGroup>
@@ -74,17 +74,6 @@
         <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all"/>
     </ItemGroup>
 
-    <!-- References - Game Assemblies -->
-    <ItemGroup Condition="$(CI) != 'true'">
-        <Reference Include="Assembly-CSharp" Publicize="true" Private="false">
-            <HintPath>$(ManagedDirectory)Assembly-CSharp.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-
-    <!-- Package References - Game Assemblies -->
-    <ItemGroup Condition="$(CI) == 'true'">
-        <PackageReference Include="ContentWarning.GameLibs.Steam" Version="*-*" Publicize="true" PrivateAssets=""/>
-    </ItemGroup>
     <ItemGroup>
       <None Remove="WordBlock.txt" />
       <EmbeddedResource Include="WordBlock.txt" />
